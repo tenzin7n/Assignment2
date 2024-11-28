@@ -1,39 +1,107 @@
+import java.io.*;
+
 public class AssignmentTwo {
-    public static void main(String[] args) {
-        AssignmentTwo a2 = new AssignmentTwo();
-        a2.partThree();
+
+    public static void main(String[] args) throws IOException {
+        AssignmentTwo assignment = new AssignmentTwo();
+        assignment.partThree();
+        assignment.partFourA();
+        assignment.partFive();
+        assignment.partSix();
+        assignment.partSeven();
     }
 
-    public void partThree() {
-        // Create a Ride with an assigned operator
-        Employee operator = new Employee("John", 30, "123456", "E001", "Operator");
-        Ride ride = new Ride("Roller Coaster", 5, operator);
+    public void partThree() throws IOException {
+        Ride rollerCoaster = new Ride("Roller Coaster", 5);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-        // Create Visitors
-        Visitor v1 = new Visitor("Alice", 25, "54321", "V01", "Regular");
-        Visitor v2 = new Visitor("Bob", 28, "65432", "V02", "VIP");
-        Visitor v3 = new Visitor("Charlie", 22, "98765", "V03", "Regular");
-        Visitor v4 = new Visitor("Daisy", 29, "45678", "V04", "VIP");
-        Visitor v5 = new Visitor("Eve", 27, "87654", "V05", "Regular");
+        System.out.println("Enter the number of visitors to add to the queue:");
+        int numVisitors = Integer.parseInt(reader.readLine());
 
-        // Add Visitors to Queue
-        ride.addVisitorToQueue(v1);
-        ride.addVisitorToQueue(v2);
-        ride.addVisitorToQueue(v3);
-        ride.addVisitorToQueue(v4);
-        ride.addVisitorToQueue(v5);
+        for (int i = 0; i < numVisitors; i++) {
+            System.out.println("Enter Visitor Details (name, age, id, ticketType, contactNumber):");
+            String[] details = reader.readLine().split(",");
+            String name = details[0].trim();
+            int age = Integer.parseInt(details[1].trim());
+            String id = details[2].trim();
+            String ticketType = details[3].trim();
+            String contactNumber = details[4].trim();
 
-        // Print Queue
-        ride.printQueue();
+            Visitor visitor = new Visitor(name, age, id, ticketType, contactNumber);
+            rollerCoaster.addVisitorToQueue(visitor);
+        }
 
-        // Remove a Visitor from Queue
-        ride.removeVisitorFromQueue();
-        ride.printQueue();
+        System.out.println("Current Queue:");
+        rollerCoaster.printQueue();
 
-        // Run One Cycle
-        ride.runOneCycle();
+        System.out.println("Removing the first visitor from the queue...");
+        rollerCoaster.removeVisitorFromQueue();
 
-        // Print Ride History
-        ride.printRideHistory();
+        System.out.println("Updated Queue:");
+        rollerCoaster.printQueue();
+    }
+
+    public void partFourA() {
+        Ride rollerCoaster = new Ride("Roller Coaster", 5);
+
+        Visitor v1 = new Visitor("Alice", 25, "V101", "Regular", "1234567890");
+        Visitor v2 = new Visitor("Bob", 30, "V102", "VIP", "9876543210");
+
+        rollerCoaster.addVisitorToHistory(v1);
+        rollerCoaster.addVisitorToHistory(v2);
+
+        System.out.println("Checking if Alice is in the history: " + rollerCoaster.checkVisitorFromHistory(v1));
+
+        System.out.println("Ride History:");
+        rollerCoaster.printRideHistory();
+    }
+
+    public void partFive() throws IOException {
+        Ride rollerCoaster = new Ride("Roller Coaster", 5);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        System.out.println("Enter the number of visitors to add to the queue:");
+        int numVisitors = Integer.parseInt(reader.readLine());
+
+        for (int i = 0; i < numVisitors; i++) {
+            System.out.println("Enter Visitor Details (name, age, id, ticketType, contactNumber):");
+            String[] details = reader.readLine().split(",");
+            String name = details[0].trim();
+            int age = Integer.parseInt(details[1].trim());
+            String id = details[2].trim();
+            String ticketType = details[3].trim();
+            String contactNumber = details[4].trim();
+
+            Visitor visitor = new Visitor(name, age, id, ticketType, contactNumber);
+            rollerCoaster.addVisitorToQueue(visitor);
+        }
+
+        System.out.println("Running one cycle of the ride...");
+        rollerCoaster.runOneCycle();
+
+        System.out.println("Ride History After One Cycle:");
+        rollerCoaster.printRideHistory();
+    }
+
+    public void partSix() throws IOException {
+        Ride rollerCoaster = new Ride("Roller Coaster", 5);
+
+        Visitor v1 = new Visitor("Alice", 25, "V101", "Regular", "1234567890");
+        Visitor v2 = new Visitor("Bob", 30, "V102", "VIP", "9876543210");
+
+        rollerCoaster.addVisitorToHistory(v1);
+        rollerCoaster.addVisitorToHistory(v2);
+
+        rollerCoaster.exportRideHistory("ride_history.csv");
+        System.out.println("Ride history exported to ride_history.csv");
+    }
+
+    public void partSeven() throws IOException {
+        Ride rollerCoaster = new Ride("Roller Coaster", 5);
+
+        rollerCoaster.importRideHistory("ride_history.csv");
+
+        System.out.println("Imported Ride History:");
+        rollerCoaster.printRideHistory();
     }
 }
